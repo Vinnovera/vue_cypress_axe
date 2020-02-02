@@ -23,3 +23,37 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+import axios from 'axios'
+
+Cypress.Commands.add('mock_scenario', scenario => {
+  let requestParams
+
+  switch (scenario) {
+    case 'full': {
+      requestParams = {
+        method: 'POST',
+        url: 'http://localhost:3333/robohydra-admin/rest/plugins/myproject/scenarios/200_Full_response',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded'
+        },
+        data: 'active=true'
+      }
+      break
+    }
+
+    case '500': {
+      requestParams = {
+        method: 'POST',
+        url: 'http://localhost:3333/robohydra-admin/rest/plugins/myproject/scenarios/500_Internal_Server_Error',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded'
+        },
+        data: 'active=true'
+      }
+      break
+    }
+  }
+
+  axios.request(requestParams)
+})
